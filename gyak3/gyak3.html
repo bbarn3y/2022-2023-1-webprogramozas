@@ -9,7 +9,33 @@
     </head>
 
     <body>
+        <h1>Coloring</h1>
+        <div id="colorMe" class="no-text-select">Color me impressed</div>
 
+        <h1>Checkbox</h1>
+        Can I toggle the checkkbox?
+        <select id="checkboxSelector">
+            <option value="ALLOW">Sure, you can!</option>
+            <option value="DISALLOW">No way!</option>
+        </select>
+        <input id="checkMeBox" type="checkbox" /> Check me!
+
+        <h1>Event propagation</h1>
+        <div id="outerRectangle">
+            <div id="innerRectangle"></div>
+        </div>
+
+        <h1>Randomly disable hyperlinks</h1>
+
+        <div id="hyperlinkContainer" style="background: lightblue; padding: 10px;">
+            <a class="possibly-disabled" href="https://google.com" target="_blank">Google</a>
+            <a class="possibly-disabled" href="https://translate.google.com" target="_blank">Google Translate</a>
+            <a class="possibly-disabled" href="https://calendar.google.com" target="_blank">Google Calendar</a>
+            <a class="possibly-disabled" href="https://gmail.com" target="_blank">Google Mail</a>
+        </div>
+
+
+        <button id="hyperlinkDisabled">Disable stuff randomly!</button>
 
 
 

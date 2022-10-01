@@ -23,4 +23,5 @@ Segítség:
 egy attribútumban.
 - Az input mezőnél a "keydown" esemény hasznos lehet.
 - A "display: none" stílus-beállítással egyszerűen elrejthetők HTML elemek.
+- Angol ABC betűinek detektálása: https://stackoverflow.com/questions/9862761/how-to-check-if-character-is-a-letter-in-javascript
 - Random szám generálás: https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
