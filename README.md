@@ -12,4 +12,14 @@
 ## 2. gyakorlat
 
 - Tömbműveletek folytatása (map, flatMap, find, findIndex, reduce)
+- DOM bevezető
+- Példák: gyökszámítás és szorzótábla
+
+## 3. gyakorlat
+- Házi feladat megoldási lehetőségeinek áttekintése: legfiatalabb női személy megkeresése
+- Eseménykezelés
+- preventDefault() és stopPropagation() használata
+
+## 4. gyakorlat
+- ZH
 - ...
