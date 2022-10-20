@@ -4,3 +4,17 @@
     display: inline-block;
     border: 1px solid black;
 }
+
+.cell.player-wins {
+    background: green;
+}
+.cell.player-wrong-guess {
+    background: red;
+}
+
+.cell.adversarys-won {
+    background: aqua;
+}
+.cell.adversarys-wrong-guess {
+    background: purple;
+}
