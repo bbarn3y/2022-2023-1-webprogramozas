@@ -106,13 +106,18 @@ delegate(containerEl, 'click', '.cell', (event) => {
 const formEl = document.querySelector('#form');
 const availableEl = formEl.elements['availableInCinemas'];
 const nextEl = formEl.elements['next'];
+const protagonistEl = formEl.elements['protagonist'];
 const titleEl = formEl.elements['title'];
 
 function init () {
     try {
-        JSON.parse(localStorage.getItem('formState'));
+        const formState = JSON.parse(localStorage.getItem('formState'));
+        availableEl.value = formState.available;
+        nextEl.value = formState.next;
+        protagonistEl.value = formState.protagonist;
+        titleEl.value = formState.title;
     } catch (e) {
-        console.log('')
+        console.log('e', e);
     }
 
 }
@@ -122,6 +127,8 @@ function validateNext() {
     if (availableEl.value === 'yes' && !nextEl.value) {
         console.log('nextEl is invalid!');
         nextEl.setCustomValidity('If the movie is available in cinemas, then the next date must be provided.');
+    } else {
+        nextEl.setCustomValidity('');
     }
 }
 
@@ -131,13 +138,15 @@ function submitForm(event) {
     console.log(availableEl, nextEl);
     validateNext();
 
-    // @todo Validate
-    const state = {
-        'available': availableEl.value,
-        'next': nextEl.value,
-        'title': titleEl.value
-    };
-    localStorage.setItem('formState', JSON.stringify(state))
+    if ([...formEl.elements].every((element) => element.validity.valid)) {
+        const state = {
+            'available': availableEl.value,
+            'next': nextEl.value,
+            'protagonist': protagonistEl.value,
+            'title': titleEl.value
+        };
+        localStorage.setItem('formState', JSON.stringify(state))
+    }
 }
 
 init();
