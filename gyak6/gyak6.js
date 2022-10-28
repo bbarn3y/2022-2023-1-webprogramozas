@@ -33,6 +33,42 @@ const canvG = document.querySelector('canvas#game');
 const ctxG = canvG.getContext('2d');
 const canvasWidth = canvG.width;
 const canvasHeight = canvG.height;
+let gameOver = false;
+let trapImageWidth;
+let trapImageHeight;
+
+class Exit {
+    constructor(context, x, y, width, height) {
+        this.context = context;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    draw() {
+        this.context.beginPath();
+        this.context.moveTo(this.x, this.y);
+        this.context.lineTo(this.x + this.width, this.y);
+        this.context.lineTo(this.x + this.width, this.y - this.height);
+        this.context.quadraticCurveTo(this.x + this.width / 2,
+            this.y - this.height * 1.5,
+            this.x,
+            this.y - this.height);
+        this.context.lineTo(this.x, this.y);
+        this.context.closePath();
+        this.context.stroke();
+    }
+
+    rect() {
+        return {
+            x: this.x,
+            y: this.y - this.height * 1.25,
+            width: this.width,
+            height: this.height * 1.25
+        }
+    }
+}
 
 class Player {
     constructor(context, x, y, radius) {
@@ -84,6 +120,39 @@ class Tile {
     }
 }
 
+class Trap {
+    constructor(context) {
+        this.context = context;
+        this.reset();
+    }
+
+    draw() {
+        this.context.drawImage(trapImgEl, this.x, this.y);
+    }
+
+    move() {
+        this.y += 2;
+        if (this.y > canvasHeight) {
+            this.reset();
+        }
+    }
+
+    rect() {
+        return {
+            x: this.x,
+            y: this.y,
+            width: trapImageWidth,
+            height: trapImageHeight
+        }
+    }
+
+    reset() {
+        console.log('trapImageHeight', trapImageHeight)
+        this.x = randomNumber(250, 500);
+        this.y = 0 - trapImageHeight;
+    }
+}
+
 const map = [
     new Tile(ctxG,0, 50, 150, 10),
     new Tile(ctxG,150, 50, 10, 200),
@@ -110,15 +179,23 @@ const map = [
     new Tile(ctxG,950, 400, 50, 10),
 ]
 
+const exits = [
+    new Exit(ctxG, 960, 325, 30, 50)
+];
+
 const player = new Player(ctxG, 20, 20, 20);
+
+const traps = [];
 
 let previousTime = performance.now();
 function cycle(now = performance.now()) {
+    if (gameOver) return;
     const dt = (now - previousTime) / 1000
     previousTime = now
 
     update(dt);
     draw();
+    detectCollision();
 
     requestAnimationFrame(cycle);
 }
@@ -126,10 +203,13 @@ function cycle(now = performance.now()) {
 function draw() {
     ctxG.clearRect(0, 0, 1000, 500);
     map.forEach(t => t.draw());
+    exits.forEach(e => e.draw());
     player.draw();
+    traps.forEach(t => t.draw());
 }
 
 function update() {
+    traps.forEach(t => t.move());
 }
 
 function rectanglesCollide(rect1, rect2) {
@@ -143,12 +223,32 @@ function detectCollision() {
     if (map.some((tile) => rectanglesCollide(player.rect(), tile))) {
         return true;
     }
+    if (traps.some((trap) => rectanglesCollide(player.rect(), trap.rect()))) {
+        alert("You lost!");
+        gameOver = true;
+    }
+    if (exits.some((exit) => rectanglesCollide(player.rect(), exit.rect()))) {
+        alert("You won!");
+        gameOver = true;
+    }
     return false;
 }
 
-cycle();
+
+const trapImgEl = document.getElementById('trapImg');
+const imageTrap = new Image();
+imageTrap.onload = function(event) {
+    console.log('event', event);
+    trapImageWidth = event.path[0].width;
+    trapImageHeight = event.path[0].height;
+    console.log('trapImageHeight', trapImageHeight);
+    traps.push(new Trap(ctxG));
+    cycle();
+}
+imageTrap.src = 'trap_transparent.png'
 
 document.addEventListener('keydown', (event) => {
+    if (gameOver) return;
     const previousPosition = { x: player.x, y: player.y }
     switch (event.key) {
         case 'ArrowLeft':
