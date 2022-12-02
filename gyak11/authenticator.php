@@ -1,5 +1,7 @@
 <?php
 
+include 'util.php';
+
 
 class UserStorage {
 
@@ -15,17 +17,12 @@ class UserStorage {
 
 function check_user($user_storage, $username, $password) {
     $user = $user_storage->findUser($username, $password);
-    return count($user) == 1 ? $user : NULL;
+    return count($user) == 1 ? array_shift($user) : NULL;
 }
 
 function login($user) {
     session_start();
     $_SESSION['user'] = $user;
-}
-
-function redirect($page) {
-    header("Location: $page");
-    exit();
 }
 
 $userStorage = new UserStorage();
